@@ -1,7 +1,7 @@
 #include "array_bag.hpp"
 #include <iostream>
 
-array_bag::array_bag() : arr(nullptr), size(0) {}
+array_bag::array_bag() : arr(0), size(0) {}
         
 array_bag::array_bag(const array_bag& other)
 {
@@ -17,10 +17,10 @@ array_bag&  array_bag::operator=(const array_bag& other)
         return (*this);
     else
     {
-        if (this->arr != nullptr)
+        if (this->arr != 0)
         {
             delete[] this->arr;
-            this->arr = nullptr;
+            this->arr = 0;
         }
         this->size = other.size;
         this->arr = new int[size];
@@ -32,10 +32,10 @@ array_bag&  array_bag::operator=(const array_bag& other)
 
 array_bag::~array_bag()
 {
-    if (arr != nullptr)
+    if (arr != 0)
     {
         delete[] arr;
-        arr = nullptr;
+        arr = 0;
     }
 }
 
@@ -45,7 +45,7 @@ void    array_bag::insert(int num)
     for (int i = 0; i < size; i++)
         new_arr[i] = arr[i];
     new_arr[size] = num;
-    if (arr != nullptr)
+    if (arr != 0)
         delete[] arr;
     arr = new_arr;
     size++;
@@ -58,7 +58,7 @@ void    array_bag::insert(int *data, int count)
         new_arr[i] = arr[i];
     for (int i = size; i < size + count; i++)
         new_arr[i] = data[i - size];
-    if (arr != nullptr)
+    if (arr != 0)
         delete[] arr;
     arr = new_arr;
     size += count;
@@ -73,10 +73,10 @@ void    array_bag::print() const
 
 void    array_bag::clear()
 {
-    if (arr != nullptr)
+    if (arr != 0)
     {
         delete[] arr;
-        arr = nullptr;
+        arr = 0;
     }
     size = 0;
 }

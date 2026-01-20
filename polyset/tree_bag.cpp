@@ -3,8 +3,8 @@
 
 tree_bag::node*    tree_bag::copy_node(node* cur)
 {
-    if (cur == nullptr)
-        return (nullptr);
+    if (cur == 0)
+        return (0);
     node *new_node = new node;
     new_node->value = cur->value;
     new_node->left = copy_node(cur->left);
@@ -14,7 +14,7 @@ tree_bag::node*    tree_bag::copy_node(node* cur)
 
 void    tree_bag::print_node(node* cur)
 {
-    if (cur == nullptr)
+    if (cur == 0)
         return ;
     print_node(cur->left);
     std::cout << cur->value << " ";
@@ -23,14 +23,14 @@ void    tree_bag::print_node(node* cur)
 
 void    tree_bag::destroy_node(node* cur)
 {
-    if (cur == nullptr)
+    if (cur == 0)
         return ;
     destroy_node(cur->left);
     destroy_node(cur->right);
     delete cur;
 }
 
-tree_bag::tree_bag() : tree(nullptr) {}
+tree_bag::tree_bag() : tree(0) {}
 
 tree_bag::tree_bag(const tree_bag& other)
 {
@@ -55,9 +55,9 @@ void    tree_bag::insert(int num)
 {
     node    *new_node = new node;
     new_node->value = num;
-    new_node->left = nullptr;
-    new_node->right = nullptr;
-    if (tree == nullptr)
+    new_node->left = 0;
+    new_node->right = 0;
+    if (tree == 0)
         tree = new_node;
     else
     {
@@ -66,7 +66,7 @@ void    tree_bag::insert(int num)
         {
             if (cur->value > num)
             {
-                if (cur->left == nullptr)
+                if (cur->left == 0)
                 {
                     cur->left = new_node;
                     break ;
@@ -76,7 +76,7 @@ void    tree_bag::insert(int num)
             }
             else if (cur->value < num)
             {
-                if (cur->right == nullptr)
+                if (cur->right == 0)
                 {
                     cur->right = new_node;
                     break ;
@@ -108,5 +108,5 @@ void    tree_bag::print() const
 void    tree_bag::clear()
 {
     destroy_node(tree);
-    tree = nullptr;
+    tree = 0;
 }

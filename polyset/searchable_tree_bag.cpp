@@ -16,7 +16,7 @@ searchable_tree_bag::~searchable_tree_bag(){}
 bool    searchable_tree_bag::has(int num)const
 {
     node    *cur = tree;
-    while (cur != nullptr)
+    while (cur != 0)
     {
         if (cur->value == num)
             return (true);

@@ -1,6 +1,8 @@
 #ifndef SET_HPP
 #define SET_HPP
 
+#include "searchable_bag.hpp"
+
 class searchable_bag;
 
 class set
