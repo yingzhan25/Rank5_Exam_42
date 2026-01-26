@@ -1,13 +1,42 @@
 #include "life.h"
 
-static void	free_grid(t_game *game)
+static void	free_grid(char **grid, int num)
 {
-	for (int i = 0; i < game->hei; i++)
-		free(game->grid[i]);
-	free(game->grid);
+	if (grid)
+	{
+		for (int i = 0; i < num; i++)
+			free(grid[i]);
+		free(grid);
+	}
 }
 
-static int	init_grid(t_game *game, char **av)
+static char**	init_grid(t_game *game, int flag)
+{
+	char	**grid;
+
+	grid = malloc(game->hei * sizeof(char*));
+	if (!grid)
+		return (NULL);
+	for (int i = 0; i < game->hei; i++)
+	{
+		grid[i] = malloc(game->wid * sizeof(char));
+		if (!grid[i])
+		{
+			free_grid(grid, i);
+			return (NULL);
+		}
+		for (int j = 0; j < game->wid; j++)
+		{
+			if (!flag)
+				grid[i][j] = ' ';
+			else
+				grid[i][j] = game->grid[i][j];
+		}
+	}
+	return (grid);
+}
+
+static int	init_game(t_game *game, char **av)
 {
 	game->wid = atoi(av[1]);
 	game->hei = atoi(av[2]);
@@ -15,22 +44,9 @@ static int	init_grid(t_game *game, char **av)
 	game->x = 0;
 	game->y = 0;
 	game->draw = -1;
-	game->grid = malloc(game->hei * sizeof(char*));
+	game->grid = init_grid(game, 0);
 	if (!game->grid)
 		return (1);
-	for (int i = 0; i < game->hei; i++)
-	{
-		game->grid[i] = malloc(game->wid * sizeof(char));
-		if (!game->grid[i])
-		{
-			for (int j = 0; j < i; j++)
-				free(game->grid[j]);
-			free(game->grid);
-			return (1);
-		}
-		for (int j = 0; j < game->wid; j++)
-			game->grid[i][j] = ' ';
-	}
 	return (0);
 }
 
@@ -80,34 +96,21 @@ static int	should_alive(t_game *game, char **tmp, int i, int j)
 
 static int	iter_grid(t_game *game)
 {
-	t_game	tmp;
-	tmp.grid = malloc(game->hei * sizeof(char*));
-	if (!tmp.grid)
+	char	**tmp;
+	tmp = init_grid(game, 1);
+	if (!tmp)
 		return (1);
 	for (int i = 0; i < game->hei; i++)
 	{
-		tmp.grid[i] = malloc(game->wid * sizeof(char));
-		if (!tmp.grid[i])
-		{
-			for (int j = 0; j < i; j++)
-				free(tmp.grid[j]);
-			free(tmp.grid);
-			return (1);
-		}
-		for (int j = 0; j < game->wid; j++)
-			tmp.grid[i][j] = game->grid[i][j];
-	}
-	for (int i = 0; i < game->hei; i++)
-	{
 		for (int j = 0; j < game->wid; j++)
 		{
-			if (should_alive(game, tmp.grid, i, j))
+			if (should_alive(game, tmp, i, j))
 				game->grid[i][j] = '0';
 			else
 				game->grid[i][j] = ' ';
 		}
 	}
-	free_grid(&tmp);
+	free_grid(tmp, game->hei);
 	return (0);
 }
 
@@ -127,7 +130,7 @@ int	main(int ac, char **av)
 
 	if (ac != 4)
 		return (1);
-	if (init_grid(&game, av))
+	if (init_game(&game, av))
 		return (1);
 	fill_grid(&game);
 	for (int i = 0; i < game.ite; i++)
@@ -136,6 +139,6 @@ int	main(int ac, char **av)
 			return (1);
 	}
 	print_grid(&game);
-	free_grid(&game);
+	free_grid(game.grid, game.hei);
 	return (0);
 }
